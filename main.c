@@ -6,7 +6,7 @@
 /*   By: yfarhat <yfarhat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/23 20:55:46 by username          #+#    #+#             */
-/*   Updated: 2026/10/28 13:29:43 by yfarhat          ###   ########.fr       */
+/*   Updated: 2026/10/30 15:22:48 by yfarhat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -475,7 +475,7 @@ static void test_ft_lstadd_front(void)
 
 static void test_ft_lstsize_lstlast(void)
 {
-	/* 
+	/*
 	char	*p1 = "Hello ";
 	char	*p2 = "Big ";
 	char	*p3 = "Ass ";
@@ -488,7 +488,6 @@ static void test_ft_lstsize_lstlast(void)
 	t_list	*node_4 = ft_lstnew(p4);
 	t_list	*head = NULL;
 	t_list  *last;
-	t_list	*ass;
 	
 	printf("\n ---- Testing ft_lstsize && ft_lstlast && ft_lstadd_back --- \n");
 	
@@ -505,11 +504,11 @@ static void test_ft_lstsize_lstlast(void)
 	printf("-----------------------------------------------\n");
 	
 	
-	ass = head;
-	ft_lstadd_back(&ass, node_4);
-	printf("address of ass is <%p>\n", ass);
+	
+	ft_lstadd_back(&head, node_4);
+	printf("Node 3 next address is : <%p>\n", (void *)node_3->next);
 	printf("Node 4 next address is : <%p>\n", (void *)node_4->next);
-
+	
 	printf("Be Hold the ADDRESS OF HEAD : < %p >\n", head);
 	printf("-----------------------------------------------\n");
 	
@@ -523,8 +522,32 @@ static void test_ft_lstsize_lstlast(void)
 	free(node_3);
 	free(node_4);
 	*/
+	t_list *node1;
+    t_list *node2;
+    t_list *head = NULL;
+
+    node1 = ft_lstnew("Hello");
+    node2 = ft_lstnew("World");
+
+	printf("\n ---- Testing ft_lstsize && ft_lstlast && ft_lstadd_back --- \n");
+    printf("Address of n1 is <%p>\n", node1);
+    printf("Address of n2 is <%p>\n", node2);
+    
+    ft_lstadd_back(&head, node1);
+    ft_lstadd_back(&head, node2);
+    
+    printf("address of n1 next is <%p>\n", node1->next);
+    printf("address of head is <%p>\n", head);
 	
-	t_list *empty_head = NULL;
+	int count = ft_lstsize(head);
+	t_list *last = ft_lstlast(head);
+	printf("Last node is <%p> \n", (void *)last);
+	printf("Total Nodes count : < %d >\n", count);
+
+    free(node1);
+    free(node2);
+	
+	/* t_list *empty_head = NULL;
 	t_list *first = ft_lstnew("Solo");
 	int count;
 	t_list *last;
@@ -539,8 +562,168 @@ static void test_ft_lstsize_lstlast(void)
 	printf("Last node is <%p> \n", (void *)last);
 	printf("Total Nodes count : < %d >\n", count);
 	free(first);
+	*/
+}
+static void del(void *ptr)
+{
+    free(ptr);
+}
+static void test_ft_lstdelone(void)
+{
+	t_list *node1;
+    char *ptr = "Hello";
+    char *dub = ft_strdup(ptr);
+    node1 = ft_lstnew(dub);
+	
+	printf("\n ----- Testing ft_lstdelone -----\n");
+    printf("address of node 1 BEFORE <%p>\n", node1);
+    
+    
+    printf("Lets try printing <%s>\n", (char *)node1->content);
+    ft_lstdelone(node1, del);
+    // printf("Lets try printing after freeing <%s>\n", (char *)node1->content);
 }
 
+static void test_ft_lstclear(void)
+{
+	t_list *node1;
+	t_list *node2;
+	t_list *head = NULL;
+	int count;
+	t_list *last;
+    char *ptr = "Hello";
+    char *dub1 = ft_strdup(ptr);
+	char *dub2 = ft_strdup(ptr);
+	
+    node1 = ft_lstnew(dub1);
+	node2 = ft_lstnew(dub2);
+	
+	ft_lstadd_front(&head, node2);
+	ft_lstadd_front(&head, node1);
+	
+	printf("\n ----- Testing ft_lstclear -----\n");
+    printf("address of node 1  <%p> and its content <%s>\n", node1, (char *)node1->content);
+	printf("address of node 2  <%p> and its content <%s>\n", node2, (char *)node2->content);
+    
+	printf("Be Hold the ADDRESS OF HEAD : < %p >\n", head);
+
+	
+	count = ft_lstsize(head);
+	last = ft_lstlast(head);
+	printf("Last node is <%p> \n", (void *)last);
+	printf("Total Nodes count : < %d >\n", count);
+	
+	ft_lstclear(&head, del);
+
+	printf("Be Hold the ADDRESS OF HEAD : < %p >\n", head);
+}
+static void ft_uppering(void *str)
+{
+	char *ptr = (char *)str;
+	while (*ptr)
+	{
+		*ptr = ft_toupper(*ptr);
+		 ptr++;
+	}
+}
+static void test_ft_lstiter(void)
+{
+	t_list *node1;
+	t_list *node2;
+	t_list *head = NULL;
+	int count;
+	t_list *last;
+    char *ptr = "Hello";
+    char *dub1 = ft_strdup(ptr);
+	char *dub2 = ft_strdup(ptr);
+	
+    node1 = ft_lstnew(dub1);
+	node2 = ft_lstnew(dub2);
+	
+	ft_lstadd_front(&head, node2);
+	ft_lstadd_front(&head, node1);
+	
+	printf("\n ----- Testing ft_lstiter -----\n");
+    printf("address of node 1  <%p> and its content <%s>\n", node1, (char *)node1->content);
+	printf("address of node 2  <%p> and its content <%s>\n", node2, (char *)node2->content);
+    
+	printf("Be Hold the ADDRESS OF HEAD : < %p >\n", head);
+
+	
+	count = ft_lstsize(head);
+	last = ft_lstlast(head);
+	printf("Last node is <%p> \n", (void *)last);
+	printf("Total Nodes count : < %d >\n", count);
+	
+	ft_lstiter(head, ft_uppering);
+	printf("address of node 1  <%p> and its content <%s>\n", node1, (char *)node1->content);
+	printf("address of node 2  <%p> and its content <%s>\n", node2, (char *)node2->content);
+
+	
+	ft_lstclear(&head, del);
+}
+
+static void    *f_lstmap(void *content)
+{
+    char *new_content;
+	int	i = 0;
+	
+    new_content = ft_strdup((char *)content);
+    if (!new_content)
+        return (NULL);
+    while (new_content[i])
+    {
+        new_content[i] = 'x';
+        i++;
+    }
+    return (new_content);    
+}
+
+static void test_ft_lstmap(void)
+{
+	t_list *node1;
+	t_list *node2;
+	t_list *head = NULL;
+	int count;
+	t_list *last;
+    char *ptr = "Hello";
+    char *dub1 = ft_strdup(ptr);
+	char *dub2 = ft_strdup(ptr);
+	int i;
+
+	i = 1;
+	
+    node1 = ft_lstnew(dub1);
+	node2 = ft_lstnew(dub2);
+	
+	ft_lstadd_front(&head, node2);
+	ft_lstadd_front(&head, node1);
+	
+	printf("\n ----- Testing ft_lstmap -----\n");
+    printf("address of node 1  <%p> and its content <%s>\n", node1, (char *)node1->content);
+	printf("address of node 2  <%p> and its content <%s>\n", node2, (char *)node2->content);
+    
+	printf("Be Hold the ADDRESS OF HEAD : < %p >\n", head);
+
+	
+	count = ft_lstsize(head);
+	last = ft_lstlast(head);
+	printf("Last node is <%p> \n", (void *)last);
+	printf("Total Nodes count : < %d >\n", count);
+
+	t_list *new_node_start = ft_lstmap(head, f_lstmap, del); //address of first node probably
+	t_list *new_head = new_node_start;
+	while (new_node_start)
+	{
+		printf("New node number <%d>, address <%p> with content <%s>\n", i, new_node_start, (char *)new_node_start->content);
+		i++;
+		new_node_start = new_node_start->next;
+	}
+	printf("Head of the new nodes <%p>\n", new_head);
+	
+	ft_lstclear(&head, del);
+	ft_lstclear(&new_head, del);
+}
 static void	get_base_info(int n)
 {
 	printf("\n---- Base Infos ----\n");
@@ -597,6 +780,10 @@ int	main(void)
 	test_ft_lstnew();
 	test_ft_lstadd_front();
 	test_ft_lstsize_lstlast();
+	test_ft_lstdelone();
+	test_ft_lstclear();
+	test_ft_lstiter();
+	test_ft_lstmap();
 	print_bits((unsigned char) n);
 	get_base_info(n);
 	printf("\n");
